@@ -12,63 +12,12 @@ router.get("/", async (req, res) => {
   res.send(users);
 });
 
-router.post("/", async (req, res) => {
-  try {
-    const webUser = new WebUser({
-      username: req.body.username,
-
-      fullName: req.body.fullName,
-      email: req.body.email,
-      gender: req.body.gender,
-      country: req.body.country,
-      phone: req.body.phone,
-
-      uni: req.body.uni,
-      associations: req.body.associations,
-      yearsOfStudy: req.body.yearsOfStudy,
-
-      //bool
-      delegate: req.body.delegate,
-
-      gradYear: req.body.gradYear,
-
-      //bool
-      iadsEmployed: req.body.iadsEmployed,
-      iadsMember: req.body.iadsMember,
-
-      iadsPosition: req.body.iadsPosition,
-      iadsEmail: req.body.iadsEmail,
-    });
-
-    await webUser.save();
-    res.send(webUser);
-  } catch (err) {
-    console.log(err);
-  }
-});
-
+// Signup
 router.post("/signup", async (req, res, next) => {
   console.log(req.body.data);
-  let {
-    username,
-    fullName,
-    email,
-    gender,
-    country,
-    phone,
-    password,
-    uni,
-    associations,
-    yearsOfStudy,
-    delegate,
-    gradYear,
-    iadsEmployed,
-    iadsMember,
-    iadsPosition,
-    iadsEmail,
-  } = req.body.data;
+  let { username, fullName, email, gender, country, phone, password } =
+    req.body.data;
 
-  if (iadsEmail) iadsEmail = iadsEmail.toLowerCase();
   if (email) email = email.toLowerCase();
   if (username) username = username.toLowerCase();
 
@@ -132,15 +81,6 @@ router.post("/signup", async (req, res, next) => {
       password: hashedPassword,
       country,
       phone,
-      uni,
-      associations,
-      yearsOfStudy,
-      delegate,
-      gradYear,
-      iadsEmployed,
-      iadsMember,
-      iadsPosition,
-      iadsEmail,
       validation: false,
       editor: false,
       admin: false,
@@ -155,7 +95,7 @@ router.post("/signup", async (req, res, next) => {
 
   let token;
   try {
-    token = jwt.sign({ userId: createdUser.id }, "ia_65412654_ajbsc7qwe_ds", {
+    token = jwt.sign({ userId: createdUser.id }, "ia_6541265_ajbsc7qwe_ds", {
       expiresIn: "1d",
     });
   } catch (err) {
@@ -254,6 +194,7 @@ router.post("/login", async (req, res, next) => {
   res.status(201).json({ user: user, token: token });
 });
 
+// Verify
 router.post("/updateVerification/:id/:bool", async (req, res, next) => {
   const id = req.params.id;
   const bool = req.params.bool;
@@ -305,6 +246,7 @@ router.post("/updateVerification/:id/:bool", async (req, res, next) => {
   res.status(201).json({ user: existingUser });
 });
 
+// Delete
 router.post("/deleteUser/:id", async (req, res, next) => {
   const id = req.params.id;
   // console.log(id);
@@ -322,6 +264,7 @@ router.post("/deleteUser/:id", async (req, res, next) => {
   res.status(201);
 });
 
+// Editting
 router.post("/updateEditting/:id/:bool", async (req, res, next) => {
   const id = req.params.id;
   const bool = req.params.bool;

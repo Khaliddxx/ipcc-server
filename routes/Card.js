@@ -54,6 +54,7 @@ router.post("/create", async (req, res, next) => {
     LeaveDate,
     visibility,
     type,
+    status,
   } = req.body;
 
   let existingCard;
@@ -91,6 +92,7 @@ router.post("/create", async (req, res, next) => {
       LeaveDate,
       visibility,
       type,
+      status,
     });
     await createdCard.save();
   } catch (err) {

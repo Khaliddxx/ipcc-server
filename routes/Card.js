@@ -108,15 +108,21 @@ router.post("/delete/:id", async (req, res, next) => {
   const id = req.params.id;
 
   try {
-    await Card.findByIdAndDelete(id);
+    const deletedCard = await Card.findByIdAndDelete(id);
+
+    if (!deletedCard) {
+      // If the document with the given ID doesn't exist, you can return an error response
+      return res.status(404).json({ message: "Card not found" });
+    }
+
+    res.status(201).json({ message: "Card deleted successfully" });
   } catch (err) {
     const error = new HttpError(
       "Deleting post failed, please try again later.",
       500
     );
+    return next(error); // Pass the error to the error handling middleware
   }
-
-  res.status(201);
 });
 
 module.exports = router;

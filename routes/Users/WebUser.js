@@ -14,9 +14,9 @@ router.get("/", async (req, res) => {
 
 // Signup
 router.post("/signup", async (req, res, next) => {
-  console.log(req.body.data);
+  console.log(req.body);
   let { username, fullName, email, gender, country, phone, password } =
-    req.body.data;
+    req.body;
 
   if (email) email = email.toLowerCase();
   if (username) username = username.toLowerCase();
@@ -81,7 +81,7 @@ router.post("/signup", async (req, res, next) => {
       password: hashedPassword,
       country,
       phone,
-      validation: false,
+      validation: true,
       editor: false,
       admin: false,
     });
@@ -120,6 +120,7 @@ router.post("/signup", async (req, res, next) => {
 router.post("/login", async (req, res, next) => {
   let { username, password } = req.body.data;
   username = username.toLowerCase();
+
   let existingUser;
   console.log(req.body);
   console.log(username);

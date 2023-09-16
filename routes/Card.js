@@ -125,4 +125,40 @@ router.post("/delete/:id", async (req, res, next) => {
   }
 });
 
+router.post("/edit/:id", async (req, res, next) => {
+  const id = req.params.id;
+
+  // Destructure the data from the request body
+  const { HostingHospital, OriginHospital, VisitDate, LeaveDate, status } =
+    req.body;
+
+  try {
+    // Find the card by ID and update its properties
+    const updatedCard = await Card.findByIdAndUpdate(
+      id,
+      {
+        HostingHospital,
+        OriginHospital,
+        VisitDate,
+        LeaveDate,
+        status,
+      },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedCard) {
+      // If the document with the given ID doesn't exist, you can return an error response
+      return res.status(404).json({ message: "Card not found" });
+    }
+
+    res.status(200).json({ message: "Card updated successfully", updatedCard });
+  } catch (err) {
+    const error = new HttpError(
+      "Updating card failed, please try again later.",
+      500
+    );
+    return next(error); // Pass the error to the error handling middleware
+  }
+});
+
 module.exports = router;

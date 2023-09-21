@@ -7,6 +7,11 @@ const mongoose = require("mongoose");
 
 const webUserRoutes = require("./routes/Users/WebUser");
 const cardRoutes = require("./routes/Card");
+const http = require("http");
+
+setInterval(() => {
+  http.get("https://ipcc-5e8a9fbf4149.herokuapp.com/");
+}, 25 * 60 * 1000); // every 25 minutes
 
 const app = express();
 
